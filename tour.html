@@ -105,7 +105,7 @@ function findNear(lat,lng,radius,label,tries=0){
       pano.setPano(data.location.pano);
       pano.setPov({heading:Math.random()*360,pitch:0});
       map.setZoom(Math.max(map.getZoom(),12));
-      setStatus(`📍 ${label}: ${data.location.description||"street view"} — drag to look 360°, click arrows to walk.`);
+      setStatus(` ${label}: ${data.location.description||"street view"} — drag to look 360°, click arrows to walk.`);
     } else if(tries<6 && current){
       randomInCountry(tries+1);
     } else {
