@@ -48,7 +48,7 @@
   <div id="sidebar">
     <h3>Countries</h3>
     <div id="searchRow">
-      <input id="search" placeholder="Country, village, cell, street...">
+      <input id="search" placeholder="Country">
       <button id="goBtn" title="Search place">search</button>
     </div>
     
@@ -174,7 +174,8 @@ function searchPlace(){
   geocoder.geocode({address:q},(results,status)=>{
     box.innerHTML="";
     if(status!=="OK"||!results.length){
-      setStatus(status==="ZERO_RESULTS"?`No place found for "${q}". Try again".`:`Place search failed (${status}). `);
+      setStatus(status==="ZERO_RESULTS"?`No place found for "${q}". Try again".`:`try again
+      (${status}). `);
       return;
     }
     const h=document.createElement("h4"); h.textContent="Places found"; box.appendChild(h);
