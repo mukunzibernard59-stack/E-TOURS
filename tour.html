@@ -3,76 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b18">
-<title>E-TOUR | Explore the world in 360°</title>
+<title>E-tour | Explore the world in 360°</title>
+    <link rel="shortcut icon" href="logo2.jpg" type="image/x-icon">
 <style>
-:root{--bg:#050711;--panel:#0b1020;--panel2:#111a30;--line:#263553;--text:#f5f7ff;--muted:#aab6d1;--blue:#315cff;--cyan:#22d3ee;--danger:#ff9d9d}
-*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%}
-body{background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;height:100vh;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
-button,input{font:inherit}button{border:1px solid transparent;border-radius:10px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;transition:opacity .15s,transform .15s}
-button:hover{opacity:.9}button:active{transform:scale(.98)}button:focus-visible,input:focus-visible,.country:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-button.ghost{background:var(--panel2);border-color:var(--line)}button:disabled{opacity:.55;cursor:wait}
-#header{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 18px;background:#080c19;border-bottom:1px solid var(--line);flex-wrap:wrap;z-index:2}
-#websiteName{color:var(--cyan);font-weight:900;font-size:clamp(1.45rem,3vw,2rem);text-decoration:none;letter-spacing:.08em;white-space:nowrap}
-.tagline{color:var(--muted);font-size:12px;margin-top:3px}
-#controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-#searchWrap{position:relative;flex:1 1 320px;min-width:210px}
-#placeSearch{width:100%;min-height:42px;padding:10px 13px;border:1px solid #354567;border-radius:10px;background:#0d1427;color:var(--text)}
-#placeSearch::placeholder{color:#9ba8c5}
-#main{flex:1;min-height:0;display:flex}
-#sidebar{width:245px;flex:0 0 245px;border-right:1px solid var(--line);background:var(--panel);overflow-y:auto;padding:13px}
-#sidebar h2{margin:5px 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:#dce6ff}
-#countrySearch{width:100%;margin-bottom:10px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#080d1b;color:white}
-.country{padding:10px;border-radius:8px;cursor:pointer;font-size:14px;color:#dbe4fb;border:1px solid transparent}
-.country:hover,.country.active{background:#17264a;border-color:#2d4d9e;color:white}
-#views{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}
-#pano{flex:3;min-height:180px;background:#070b14}
-#map{flex:1;min-height:135px;border-top:1px solid var(--line);background:#101728}
-#status{min-height:38px;padding:9px 13px;font-size:13px;line-height:1.4;color:var(--muted);background:#080c19;border-top:1px solid var(--line)}
-#status.error{color:var(--danger)}
-.small-note{color:var(--muted);font-size:12px;line-height:1.45;margin:10px 2px}
-.pac-container{z-index:10000!important;background:#10182b!important;color:white!important;border:1px solid #344566!important}
-.pac-item{color:#dbe5ff!important;padding:8px!important;border-top-color:#263553!important}.pac-item-query{color:white!important}.pac-matched{color:#66e8ff!important}
-@media(max-width:800px){
- body{height:100dvh}#header{padding:10px 12px;align-items:flex-start}#brand{flex:1 1 100%}#controls{width:100%}#searchWrap{flex:1 1 100%;order:-1}#controls button{flex:1 1 auto}
- #main{flex-direction:column}#sidebar{width:100%;flex:0 0 auto;max-height:150px;border-right:0;border-bottom:1px solid var(--line);padding:8px 10px}
- #sidebar h2{display:inline-block;margin:4px 8px 7px 0}#countrySearch{width:min(58%,260px);margin:0 0 7px}#list{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}.country{flex:0 0 auto;padding:8px 10px}
- #pano{flex:2;min-height:210px}#map{flex:1;min-height:120px}
-}
-@media(max-width:420px){#controls button{padding:9px;font-size:12px}#sidebar{max-height:135px}#pano{min-height:190px}}
+  *{box-sizing:border-box}
+  body{margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;height:100vh;display:flex;flex-direction:column}
+  #header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;border-bottom:1px solid #fff;gap:12px;flex-wrap:wrap}
+  #websiteName{color:rgb(0,14,173);font-weight:800;font-size:clamp(1.6rem,4vw,2.6rem);text-decoration:none}
+  #controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  select,input,button{padding:10px 12px;border-radius:5px;border:1px solid #fff;background:#111;color:#fff;font-weight:700}
+  button{background:rgb(49,49,238);cursor:pointer}
+  button.ghost{background:transparent}
+  button:hover{opacity:.85}
+  #main{flex:1;display:flex;min-height:0}
+  #sidebar{width:260px;border-right:1px solid #fff;overflow-y:auto;padding:10px}
+  #sidebar h3{margin:6px 0 10px;border-left:3px solid rgb(112,0,0);padding-left:8px}
+  #search{width:100%;margin-bottom:8px}
+  .country{padding:8px;border-radius:5px;cursor:pointer;font-size:14px}
+  .country:hover,.country.active{background:rgba(128,128,128,.6)}
+  #views{flex:1;display:flex;flex-direction:column;min-width:0}
+  #pano{flex:3;min-height:0}
+  #map{flex:1;min-height:150px;border-top:1px solid #fff}
+  #status{padding:6px 12px;font-size:13px;color:#ccc;border-top:1px solid #333}
+  @media(max-width:768px){#main{flex-direction:column}#sidebar{width:100%;height:160px;border-right:none;border-bottom:1px solid #fff}}
 </style>
 </head>
 <body>
-<header id="header">
-  <div id="brand"><a id="websiteName" href="menu.html">E-TOUR</a><div class="tagline">Explore the world in 360°</div></div>
+<div id="header">
+  <a id="websiteName" href="menu.html">E-TOUR</a>
   <div id="controls">
-    <div id="searchWrap"><input id="placeSearch" type="search" placeholder="Search country, street, village, cell, or landmark..." aria-label="Search for a place" autocomplete="off"></div>
-    <button id="meBtn" type="button" class="ghost"> Me</button>
-    <button id="randomBtn" type="button">Random place</button>
-    <button id="nextBtn" type="button" class="ghost">Next spot ➜</button>
+    <button id="randomBtn"> Random place</button>
+    <button id="nextBtn" class="ghost">Next spot in country </button>
   </div>
-</header>
-<main id="main">
-  <aside id="sidebar" aria-label="Country selector">
-    <h2>Explore countries</h2><input id="countrySearch" type="search" placeholder="Filter countries..." aria-label="Filter countries">
+</div>
+<div id="main">
+  <div id="sidebar">
+    <h3>Countries</h3>
+    <input id="search" placeholder="Search a country...">
     <div id="list"></div>
-    <p class="small-note">Search above for a specific street or village. Street View is only available where Google has imagery.</p>
-  </aside>
-  <section id="views" aria-label="Map and 360 degree street view">
-    <div id="pano" aria-label="360 degree street view"></div>
-    <div id="map" aria-label="Map. Click a location to search for nearby street view"></div>
-    <div id="status" role="status" aria-live="polite">Loading the map. Search for a place or choose a country to begin.</div>
-  </section>
-</main>
+  </div>
+  <div id="views">
+    <div id="pano"></div>
+    <div id="map"></div>
+    <div id="status">Pick a country to start your 360° tour. Drag to look around, click arrows to walk.</div>
+  </div>
+</div>
 <script>
-"use strict";
-/*
-SETUP:
-1. Replace the placeholder below with your Google Maps API key.
-2. Enable Maps JavaScript API and Places API in Google Cloud; enable billing.
-3. Restrict the key to your website, e.g. https://mukunzibernard59-stack.github.io/*
-*/
+// ========= PUT YOUR GOOGLE MAPS API KEY HERE =========
+// Enable "Maps JavaScript API" in Google Cloud Console for this key.
 const API_KEY = "AIzaSyAVsM1TDf3uVt-DqI_dztH007X1DZJtW3E";
+// =====================================================
+// Countries with Street View coverage: [name, lat, lng, spread in degrees]
 const COUNTRIES = [
  ["Rwanda",-1.95,30.06,0.6],["Kenya",-1.29,36.82,2],["Uganda",0.35,32.58,1],["Tanzania",-6.8,39.28,2],
  ["South Africa",-33.92,18.42,4],["Nigeria",6.52,3.38,1.5],["Ghana",5.6,-0.19,1.5],["Senegal",14.69,-17.44,1],
@@ -81,101 +62,71 @@ const COUNTRIES = [
  ["Argentina",-34.6,-58.38,4],["Chile",-33.45,-70.66,3],["Peru",-12.05,-77.04,2],["Colombia",4.71,-74.07,2],
  ["United Kingdom",51.5,-0.13,2],["France",48.86,2.29,3],["Germany",52.52,13.4,3],["Italy",41.89,12.49,3],
  ["Spain",40.42,-3.7,3],["Portugal",38.72,-9.14,1.5],["Netherlands",52.37,4.9,1],["Switzerland",46.95,7.45,1],
- ["Norway",59.91,10.75,3],["Sweden",59.33,18.07,3],["Poland",52.23,21.01,2],["Greece",37.97,23.72,2],
+ ["Norway",59.91,10.75,3],["Sweden",59.33,18.07,3],["Poland",52.23,21.01,2],["Greece",37.97,23.73,2],
  ["Turkey",41.01,28.98,4],["Russia",55.75,37.62,5],["Ukraine",50.45,30.52,3],["Israel",31.78,35.22,0.8],
  ["United Arab Emirates",25.2,55.27,1],["India",28.61,77.21,6],["Sri Lanka",6.93,79.85,1],["Thailand",13.75,100.5,3],
  ["Vietnam",21.03,105.85,3],["Malaysia",3.14,101.69,2],["Singapore",1.29,103.85,0.1],["Indonesia",-6.2,106.82,3],
  ["Philippines",14.6,120.98,2],["Japan",35.68,139.76,5],["South Korea",37.57,126.98,2],["Taiwan",25.03,121.56,1],
  ["Mongolia",47.92,106.92,3],["Australia",-33.86,151.21,8],["New Zealand",-41.29,174.78,3],["Iceland",64.15,-21.94,2]
 ];
-let map=null,pano=null,sv=null,marker=null,autocomplete=null,current=COUNTRIES[0],searchMarker=null,searchSequence=0;
-const $=id=>document.getElementById(id);
-function setStatus(message,isError=false){$("status").textContent=message;$("status").classList.toggle("error",isError);}
+let map, pano, sv, marker, current = null;
 function loadGoogle(){
- if(!API_KEY||API_KEY==="AIzaSyAVsM1TDf3uVt-DqI_dztH007X1DZJtW3E"){setStatus("Setup needed: add your Google Maps API key in the API_KEY variable in this file.",true);return;}
- const script=document.createElement("script");
- script.src="https://maps.googleapis.com/maps/api/js?key="+encodeURIComponent(API_KEY)+"&libraries=places&loading=async&callback=initTour";
- script.async=true;script.defer=true;script.onerror=()=>setStatus("Google Maps could not load. Check internet, API key, enabled APIs, and billing.",true);
- document.head.appendChild(script);
+  const s=document.createElement("script");
+  s.src=`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&loading=async&callback=initTour`;
+  s.async=true; s.onerror=()=>setStatus("Could not load  Maps. Check your internet.");
+  document.head.appendChild(s);
 }
-window.initTour=function(){
- try{
-  sv=new google.maps.StreetViewService();
-  map=new google.maps.Map($("map"),{center:{lat:-1.95,lng:30.06},zoom:7,streetViewControl:true,mapTypeControl:true,fullscreenControl:true,clickableIcons:true});
-  pano=new google.maps.StreetViewPanorama($("pano"),{position:{lat:-1.95,lng:30.06},pov:{heading:0,pitch:0},addressControl:true,fullscreenControl:true,motionTracking:false,linksControl:true,panControl:true,zoomControl:true,visible:false});
-  map.setStreetView(pano);marker=new google.maps.Marker({map,title:"Street View location"});
-  pano.addListener("position_changed",()=>{const p=pano.getPosition();if(p){marker.setPosition(p);map.panTo(p);}});
-  map.addListener("click",e=>{if(e.latLng)searchLocation(e.latLng.lat(),e.latLng.lng(),"the selected map location",5000);});
-  setupAutocomplete();renderList("");selectCountry(COUNTRIES[0]);
- }catch(error){console.error(error);setStatus("The map could not initialize. Check your Google Maps API setup.",true);}
-};
-function setupAutocomplete(){
- const input=$("placeSearch");
- if(!google.maps.places||!google.maps.places.Autocomplete){setStatus("Place search is unavailable. Check that the Places API is enabled for your Google Maps key.",true);return;}
- autocomplete=new google.maps.places.Autocomplete(input,{fields:["name","formatted_address","geometry","place_id"],types:["geocode","establishment"]});
- autocomplete.addListener("place_changed",()=>{
-  const place=autocomplete.getPlace();
-  if(!place.geometry||!place.geometry.location){setStatus("Choose a suggestion from the search list, or try a more specific place name.",true);return;}
-  const loc=place.geometry.location,label=place.formatted_address||place.name||input.value.trim()||"selected place";
-  map.panTo(loc);map.setZoom(15);searchLocation(loc.lat(),loc.lng(),label,10000);
- });
+function initTour(){
+  sv = new google.maps.StreetViewService();
+  map = new google.maps.Map(document.getElementById("map"),{center:{lat:20,lng:0},zoom:2,streetViewControl:false,mapTypeControl:false});
+  pano = new google.maps.StreetViewPanorama(document.getElementById("pano"),{
+    position:{lat:-1.95,lng:30.06},pov:{heading:0,pitch:0},addressControl:true,fullscreenControl:true,motionTracking:true
+  });
+  map.setStreetView(pano);
+  marker = new google.maps.Marker({map});
+  pano.addListener("position_changed",()=>{const p=pano.getPosition(); marker.setPosition(p); map.panTo(p);});
+  // Click the small map to jump anywhere
+  map.addListener("click",e=>findNear(e.latLng.lat(),e.latLng.lng(),5000,"chosen spot"));
+  renderList("");
 }
-function renderList(query){
- const list=$("list");list.replaceChildren();const q=query.trim().toLowerCase();
- const filtered=COUNTRIES.filter(c=>c[0].toLowerCase().includes(q));
- filtered.forEach(country=>{
-  const item=document.createElement("div");item.className="country"+(current&&current[0]===country[0]?" active":"");item.textContent=country[0];item.tabIndex=0;item.setAttribute("role","button");item.setAttribute("aria-label","Explore "+country[0]);
-  item.addEventListener("click",()=>selectCountry(country));
-  item.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectCountry(country);}});
-  list.appendChild(item);
- });
- if(!filtered.length){const empty=document.createElement("p");empty.className="small-note";empty.textContent="No country in this list matches. Try the main place search.";list.appendChild(empty);}
+function setStatus(t){document.getElementById("status").textContent=t;}
+function findNear(lat,lng,radius,label,tries=0){
+  setStatus(`Searching streets in ${label}...`);
+  sv.getPanorama({location:{lat,lng},radius,source:google.maps.StreetViewSource.OUTDOOR,preference:google.maps.StreetViewPreference.NEAREST},(data,status)=>{
+    if(status==="OK"){
+      pano.setPano(data.location.pano);
+      pano.setPov({heading:Math.random()*360,pitch:0});
+      map.setZoom(Math.max(map.getZoom(),12));
+      setStatus(` ${label}: ${data.location.description||"street view"} — drag to look 360°, click arrows to walk.`);
+    } else if(tries<6 && current){
+      randomInCountry(tries+1);
+    } else {
+      setStatus(`No street view found near ${label}. Try another spot.`);
+    }
+  });
 }
-function selectCountry(country){
- if(!map||!sv)return;current=country;renderList($("countrySearch").value);
- map.panTo({lat:country[1],lng:country[2]});map.setZoom(country[0]==="Rwanda"?8:5);
- searchLocation(country[1],country[2],country[0],50000);
+function randomInCountry(tries=0){
+  const [name,lat,lng,spread]=current;
+  const rl = tries<2 ? lat+(Math.random()-.5)*spread : lat; // fall back to capital
+  const rg = tries<2 ? lng+(Math.random()-.5)*spread : lng;
+  findNear(rl,rg,tries<2?20000:50000,name,tries);
 }
-function searchLocation(lat,lng,label,radius=10000){
- if(!sv||!pano){setStatus("The map is still loading. Please try again in a moment.");return;}
- const requestId=++searchSequence;setStatus("Searching for Street View near "+label+"...");
- sv.getPanorama({location:{lat,lng},radius,source:google.maps.StreetViewSource.DEFAULT,preference:google.maps.StreetViewPreference.NEAREST},(data,status)=>{
-  if(requestId!==searchSequence)return;
-  if(status===google.maps.StreetViewStatus.OK&&data&&data.location&&data.location.latLng){
-   pano.setPano(data.location.pano);pano.setVisible(true);pano.setPov({heading:0,pitch:0});
-   const position=data.location.latLng;marker.setPosition(position);map.panTo(position);map.setZoom(Math.max(map.getZoom()||0,14));
-   setStatus("📍 "+label+" — nearby Street View: "+(data.location.description||"street view")+". Drag to look around and use arrows to move where available.");
-  }else{pano.setVisible(false);map.panTo({lat,lng});setStatus("No Street View imagery was found near "+label+". Try a nearby road or zoom in on the map. The map remains available.",true);}
- });
+function selectCountry(c){
+  current=c;
+  document.querySelectorAll(".country").forEach(el=>el.classList.toggle("active",el.dataset.name===c[0]));
+  map.setCenter({lat:c[1],lng:c[2]}); map.setZoom(6);
+  findNear(c[1],c[2],50000,c[0]);
 }
-function randomSpotInCountry(){
- if(!current){setStatus("Choose a country first.");return;}
- const [name,lat,lng,spread]=current,offset=()=>((Math.random()-.5)*spread);
- const randomLat=lat+offset(),randomLng=lng+offset();map.panTo({lat:randomLat,lng:randomLng});map.setZoom(10);
- searchLocation(randomLat,randomLng,"a random spot in "+name,25000);
+function renderList(q){
+  const list=document.getElementById("list"); list.innerHTML="";
+  COUNTRIES.filter(c=>c[0].toLowerCase().includes(q.toLowerCase())).forEach(c=>{
+    const d=document.createElement("div"); d.className="country"; d.dataset.name=c[0];
+    d.textContent=c[0]; d.onclick=()=>selectCountry(c); list.appendChild(d);
+  });
 }
-function chooseRandomCountry(){selectCountry(COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)]);}
-function locateMe(){
- if(!navigator.geolocation){setStatus("This browser does not support location. Try a recent browser.",true);return;}
- $("meBtn").disabled=true;setStatus("Requesting your location permission...");
- navigator.geolocation.getCurrentPosition(position=>{
-  $("meBtn").disabled=false;const lat=position.coords.latitude,lng=position.coords.longitude;
-  map.panTo({lat,lng});map.setZoom(16);if(searchMarker)searchMarker.setMap(null);
-  searchMarker=new google.maps.Marker({map,position:{lat,lng},title:"Your current location",label:{text:"Me",color:"#ffffff"}});
-  searchLocation(lat,lng,"your current location",10000);
- },error=>{
-  $("meBtn").disabled=false;let message="Could not get your location.";
-  if(error.code===error.PERMISSION_DENIED)message="Location permission was denied. Allow location access in your browser settings, then try again.";
-  else if(error.code===error.POSITION_UNAVAILABLE)message="Your location is currently unavailable. Check your device location settings.";
-  else if(error.code===error.TIMEOUT)message="Location request timed out. Please try again.";
-  setStatus(message,true);
- },{enableHighAccuracy:true,timeout:15000,maximumAge:10000});
-}
-$("countrySearch").addEventListener("input",e=>renderList(e.target.value));
-$("randomBtn").addEventListener("click",()=>{if(!map||!sv)return setStatus("The map is still loading.");chooseRandomCountry();});
-$("nextBtn").addEventListener("click",()=>{if(!map||!sv)return setStatus("The map is still loading.");randomSpotInCountry();});
-$("meBtn").addEventListener("click",()=>{if(!map||!sv)return setStatus("The map is still loading.");locateMe();});
-$("placeSearch").addEventListener("keydown",e=>{if(e.key==="Enter"&&autocomplete)setStatus("Choose one of the Google search suggestions to open that place.");});
+document.getElementById("search").oninput=e=>renderList(e.target.value);
+document.getElementById("randomBtn").onclick=()=>{ if(!sv) return; selectCountry(COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)]); };
+document.getElementById("nextBtn").onclick=()=>{ if(!sv) return; current?randomInCountry():setStatus("Pick a country first."); };
 loadGoogle();
 </script>
 </body>
