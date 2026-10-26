@@ -78,7 +78,7 @@ let map, pano, sv, marker, current = null;
 function loadGoogle(){
   const s=document.createElement("script");
   s.src=`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&loading=async&callback=initTour`;
-  s.async=true; s.onerror=()=>setStatus("Could not load Google Maps. Check your API key.");
+  s.async=true; s.onerror=()=>setStatus("Could not load  Maps. Check your internet.");
   document.head.appendChild(s);
 }
 
