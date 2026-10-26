@@ -14,43 +14,57 @@
   select,input,button{padding:10px 12px;border-radius:5px;border:1px solid #fff;background:#111;color:#fff;font-weight:700}
   button{background:rgb(49,49,238);cursor:pointer}
   button.ghost{background:transparent}
+  button.me{padding:6px 12px;font-size:13px;background:#0a8f3c;border-radius:20px}
   button:hover{opacity:.85}
   #main{flex:1;display:flex;min-height:0}
-  #sidebar{width:260px;border-right:1px solid #fff;overflow-y:auto;padding:10px}
+  #sidebar{width:280px;border-right:1px solid #fff;overflow-y:auto;padding:10px}
   #sidebar h3{margin:6px 0 10px;border-left:3px solid rgb(112,0,0);padding-left:8px}
-  #search{width:100%;margin-bottom:8px}
+  #sidebar h4{margin:12px 0 6px;font-size:13px;color:#aaa;text-transform:uppercase;letter-spacing:.5px}
+  #searchRow{display:flex;gap:6px;margin-bottom:6px}
+  #search{flex:1;min-width:0}
+  #goBtn{padding:10px 12px}
+  #hint{font-size:12px;color:#999;margin-bottom:8px}
   .country{padding:8px;border-radius:5px;cursor:pointer;font-size:14px}
   .country:hover,.country.active{background:rgba(128,128,128,.6)}
+  .place{padding:8px;border-radius:5px;cursor:pointer;font-size:13px;border-left:3px solid #0a8f3c;margin-bottom:4px;background:#111}
+  .place:hover{background:rgba(128,128,128,.6)}
   #views{flex:1;display:flex;flex-direction:column;min-width:0}
   #pano{flex:3;min-height:0}
   #map{flex:1;min-height:150px;border-top:1px solid #fff}
   #status{padding:6px 12px;font-size:13px;color:#ccc;border-top:1px solid #333}
-  @media(max-width:768px){#main{flex-direction:column}#sidebar{width:100%;height:160px;border-right:none;border-bottom:1px solid #fff}}
+  @media(max-width:768px){#main{flex-direction:column}#sidebar{width:100%;height:190px;border-right:none;border-bottom:1px solid #fff}}
 </style>
 </head>
 <body>
 <div id="header">
   <a id="websiteName" href="menu.html">E-TOUR</a>
   <div id="controls">
+    <button id="meBtn" class="me" title="Show my exact location in Street View"> Me</button>
     <button id="randomBtn"> Random place</button>
     <button id="nextBtn" class="ghost">Next spot in country </button>
   </div>
 </div>
 <div id="main">
   <div id="sidebar">
-    <h3>Countries</h3>
-    <input id="search" placeholder="Search a country...">
+    <h3>Countries &amp; Places</h3>
+    <div id="searchRow">
+      <input id="search" placeholder="Country, village, cell, street...">
+      <button id="goBtn" title="Search place">🔍</button>
+    </div>
+    <div id="hint">Type to filter countries. Press Enter or 🔍 to search any village, cell, sector or street.</div>
+    <div id="placeBox"></div>
+    <h4>Countries</h4>
     <div id="list"></div>
   </div>
   <div id="views">
     <div id="pano"></div>
     <div id="map"></div>
-    <div id="status">Pick a country to start your 360° tour. Drag to look around, click arrows to walk.</div>
+    <div id="status">Pick a country, search a place, or press “Me” to start your 360° tour. Drag to look around, click arrows to walk.</div>
   </div>
 </div>
 <script>
 // ========= PUT YOUR GOOGLE MAPS API KEY HERE =========
-// Enable "Maps JavaScript API" in Google Cloud Console for this key.
+// Enable "Maps JavaScript API" AND "Geocoding API" in Google Cloud Console for this key.
 const API_KEY = "AIzaSyAVsM1TDf3uVt-DqI_dztH007X1DZJtW3E";
 // =====================================================
 // Countries with Street View coverage: [name, lat, lng, spread in degrees]
@@ -69,15 +83,17 @@ const COUNTRIES = [
  ["Philippines",14.6,120.98,2],["Japan",35.68,139.76,5],["South Korea",37.57,126.98,2],["Taiwan",25.03,121.56,1],
  ["Mongolia",47.92,106.92,3],["Australia",-33.86,151.21,8],["New Zealand",-41.29,174.78,3],["Iceland",64.15,-21.94,2]
 ];
-let map, pano, sv, marker, current = null;
+let map, pano, sv, geocoder, marker, meMarker, meCircle, current = null;
+
 function loadGoogle(){
   const s=document.createElement("script");
   s.src=`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&loading=async&callback=initTour`;
-  s.async=true; s.onerror=()=>setStatus("Could not load  Maps. Check your internet.");
+  s.async=true; s.onerror=()=>setStatus("Could not load Maps. Check your internet.");
   document.head.appendChild(s);
 }
 function initTour(){
   sv = new google.maps.StreetViewService();
+  geocoder = new google.maps.Geocoder();
   map = new google.maps.Map(document.getElementById("map"),{center:{lat:20,lng:0},zoom:2,streetViewControl:false,mapTypeControl:false});
   pano = new google.maps.StreetViewPanorama(document.getElementById("pano"),{
     position:{lat:-1.95,lng:30.06},pov:{heading:0,pitch:0},addressControl:true,fullscreenControl:true,motionTracking:true
@@ -90,6 +106,7 @@ function initTour(){
   renderList("");
 }
 function setStatus(t){document.getElementById("status").textContent=t;}
+
 function findNear(lat,lng,radius,label,tries=0){
   setStatus(`Searching streets in ${label}...`);
   sv.getPanorama({location:{lat,lng},radius,source:google.maps.StreetViewSource.OUTDOOR,preference:google.maps.StreetViewPreference.NEAREST},(data,status)=>{
@@ -104,6 +121,28 @@ function findNear(lat,lng,radius,label,tries=0){
       setStatus(`No street view found near ${label}. Try another spot.`);
     }
   });
+}
+// Try progressively larger radii around an exact point (used by "Me" and place search)
+function findNearProgressive(lat,lng,label,radii=[30,100,300,1000,5000,20000],i=0,onFail){
+  if(i===0) setStatus(`Searching streets at ${label}...`);
+  if(i>=radii.length){
+    setStatus(`No street view coverage near ${label}. Showing it on the map only.`);
+    if(onFail) onFail();
+    return;
+  }
+  sv.getPanorama({location:{lat,lng},radius:radii[i],source:google.maps.StreetViewSource.OUTDOOR,preference:google.maps.StreetViewPreference.NEAREST},(data,status)=>{
+    if(status==="OK"){
+      pano.setPano(data.location.pano);
+      pano.setPov({heading:0,pitch:0});
+      const d=distMeters(lat,lng,data.location.latLng.lat(),data.location.latLng.lng());
+      setStatus(`${label}: nearest street view is about ${Math.round(d)} m away — drag to look 360°, click arrows to walk.`);
+    } else findNearProgressive(lat,lng,label,radii,i+1,onFail);
+  });
+}
+function distMeters(a,b,c,d){
+  const R=6371000,rad=x=>x*Math.PI/180,dLat=rad(c-a),dLng=rad(d-b);
+  const h=Math.sin(dLat/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
 }
 function randomInCountry(tries=0){
   const [name,lat,lng,spread]=current;
@@ -124,7 +163,69 @@ function renderList(q){
     d.textContent=c[0]; d.onclick=()=>selectCountry(c); list.appendChild(d);
   });
 }
+
+// ========= PLACE SEARCH (villages, cells, sectors, streets) =========
+function searchPlace(){
+  const q=document.getElementById("search").value.trim();
+  const box=document.getElementById("placeBox");
+  if(!geocoder){return;}
+  if(!q){box.innerHTML="";setStatus("Type a village, cell, sector or street name first.");return;}
+  setStatus(`Searching places for "${q}"...`);
+  geocoder.geocode({address:q},(results,status)=>{
+    box.innerHTML="";
+    if(status!=="OK"||!results.length){
+      setStatus(status==="ZERO_RESULTS"?`No place found for "${q}". Try adding the sector/district, e.g. "Butare, Huye".`:`Place search failed (${status}). Make sure the Geocoding API is enabled for your key.`);
+      return;
+    }
+    const h=document.createElement("h4"); h.textContent="Places found"; box.appendChild(h);
+    results.slice(0,6).forEach(r=>{
+      const d=document.createElement("div"); d.className="place"; d.textContent=r.formatted_address;
+      d.onclick=()=>goToPlace(r); box.appendChild(d);
+    });
+    setStatus(`Found ${Math.min(results.length,6)} place(s). Opening the best match...`);
+    goToPlace(results[0]);
+  });
+}
+function goToPlace(r){
+  current=null;
+  document.querySelectorAll(".country").forEach(el=>el.classList.remove("active"));
+  const loc=r.geometry.location, lat=loc.lat(), lng=loc.lng();
+  if(r.geometry.viewport) map.fitBounds(r.geometry.viewport); else {map.setCenter(loc);map.setZoom(15);}
+  findNearProgressive(lat,lng,r.formatted_address);
+}
+
+// ========= "ME" BUTTON: exact user location =========
+function showMe(){
+  if(!sv) return;
+  if(!navigator.geolocation){setStatus("Your browser does not support location.");return;}
+  setStatus("Getting your exact location... please allow location access.");
+  navigator.geolocation.getCurrentPosition(pos=>{
+    const lat=pos.coords.latitude, lng=pos.coords.longitude, acc=pos.coords.accuracy;
+    const here={lat,lng};
+    current=null;
+    document.querySelectorAll(".country").forEach(el=>el.classList.remove("active"));
+    if(meMarker) meMarker.setMap(null);
+    if(meCircle) meCircle.setMap(null);
+    meMarker=new google.maps.Marker({map,position:here,title:"You are here",zIndex:999,
+      icon:{path:google.maps.SymbolPath.CIRCLE,scale:9,fillColor:"#1a73e8",fillOpacity:1,strokeColor:"#fff",strokeWeight:3}});
+    meCircle=new google.maps.Circle({map,center:here,radius:acc,fillColor:"#1a73e8",fillOpacity:.15,strokeColor:"#1a73e8",strokeOpacity:.4,strokeWeight:1});
+    map.setCenter(here); map.setZoom(17);
+    const label=`Your location (±${Math.round(acc)} m)`;
+    findNearProgressive(lat,lng,label,undefined,0,()=>{});
+    // also show address if available
+    geocoder.geocode({location:here},(res,st)=>{
+      if(st==="OK"&&res[0]) document.getElementById("status").textContent+=` • ${res[0].formatted_address}`;
+    });
+  },err=>{
+    const msg={1:"Location permission denied. Allow location access in your browser settings.",2:"Your position is unavailable. Check GPS/internet.",3:"Location request timed out. Try again."}[err.code]||"Could not get your location.";
+    setStatus(msg+" (Note: location only works on https:// or localhost.)");
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+
 document.getElementById("search").oninput=e=>renderList(e.target.value);
+document.getElementById("search").onkeydown=e=>{ if(e.key==="Enter") searchPlace(); };
+document.getElementById("goBtn").onclick=searchPlace;
+document.getElementById("meBtn").onclick=showMe;
 document.getElementById("randomBtn").onclick=()=>{ if(!sv) return; selectCountry(COUNTRIES[Math.floor(Math.random()*COUNTRIES.length)]); };
 document.getElementById("nextBtn").onclick=()=>{ if(!sv) return; current?randomInCountry():setStatus("Pick a country first."); };
 loadGoogle();
