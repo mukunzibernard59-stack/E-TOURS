@@ -46,12 +46,12 @@
 </div>
 <div id="main">
   <div id="sidebar">
-    <h3>Countries &amp; Places</h3>
+    <h3>Countries</h3>
     <div id="searchRow">
       <input id="search" placeholder="Country, village, cell, street...">
-      <button id="goBtn" title="Search place">🔍</button>
+      <button id="goBtn" title="Search place">search</button>
     </div>
-    <div id="hint">Type to filter countries. Press Enter or 🔍 to search any village, cell, sector or street.</div>
+    
     <div id="placeBox"></div>
     <h4>Countries</h4>
     <div id="list"></div>
@@ -59,7 +59,7 @@
   <div id="views">
     <div id="pano"></div>
     <div id="map"></div>
-    <div id="status">Pick a country, search a place, or press “Me” to start your 360° tour. Drag to look around, click arrows to walk.</div>
+    <div id="status">Pick a country,  or press “Me” to start your 360° tour. Drag to look around, click arrows to walk.</div>
   </div>
 </div>
 <script>
@@ -169,12 +169,12 @@ function searchPlace(){
   const q=document.getElementById("search").value.trim();
   const box=document.getElementById("placeBox");
   if(!geocoder){return;}
-  if(!q){box.innerHTML="";setStatus("Type a village, cell, sector or street name first.");return;}
-  setStatus(`Searching places for "${q}"...`);
+  if(!q){box.innerHTML="";setStatus("Type a country");return;}
+  setStatus(`Searching country for "${q}"...`);
   geocoder.geocode({address:q},(results,status)=>{
     box.innerHTML="";
     if(status!=="OK"||!results.length){
-      setStatus(status==="ZERO_RESULTS"?`No place found for "${q}". Try adding the sector/district, e.g. "Butare, Huye".`:`Place search failed (${status}). Make sure the Geocoding API is enabled for your key.`);
+      setStatus(status==="ZERO_RESULTS"?`No place found for "${q}". Try again".`:`Place search failed (${status}). `);
       return;
     }
     const h=document.createElement("h4"); h.textContent="Places found"; box.appendChild(h);
